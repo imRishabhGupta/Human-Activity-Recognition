@@ -31,19 +31,19 @@ def predict_svm(X_train, X_test, y_train, y_test):
     
 def feature_engineering(train,test):
     train=train.append(test)    
-    ipca = PCA(n_components=562)
-    ipca.fit(train)
-    train=ipca.transform(train)
+    kpca = KernelPCA(kernel="rbf", fit_inverse_transform=True, gamma=10)
+    train = kpca.fit_transform(train)
+    #ipca = PCA(n_components=562)
+    #ipca.fit(train)
+    #train=ipca.transform(train)
     X1=train[0:7352]
     X2=train[7352:]
     return X1,X2
     
 def feature_selection(train,test):
     train=np.concatenate((train,test))
-    kpca = KernelPCA(kernel="rbf", fit_inverse_transform=True, gamma=10)
-    train = kpca.fit_transform(train)
-    #sel = VarianceThreshold(threshold=(.8 * (1 - .8)))
-    #train=sel.fit_transform(train)
+    sel = VarianceThreshold(threshold=(.8 * (1 - .8)))
+    train=sel.fit_transform(train)
     X1=train[0:7352]
     X2=train[7352:]
     return X1,X2
